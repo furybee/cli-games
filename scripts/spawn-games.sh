@@ -1,58 +1,51 @@
 #!/usr/bin/env bash
 #
-# Prepare one isolated git worktree + branch per game, then print the command
-# to launch a Claude agent in each. Run from anywhere inside the repo.
+# Batch-spawn one isolated Claude Code session per game, each in its own git
+# worktree, using Claude Code's built-in `--worktree` flag. The flag creates the
+# worktree (under .claude/worktrees/<game>/, branched from origin/HEAD), starts
+# Claude in it, and cleans it up on exit — so we don't manage worktrees by hand.
 #
-#   ./scripts/spawn-games.sh tetris 2048 minesweeper
+#   ./scripts/spawn-games.sh tetris 2048 minesweeper      # print the commands
+#   ./scripts/spawn-games.sh --run tetris 2048            # actually launch them
 #
-# Each game gets:
-#   - branch  game/<name>
-#   - worktree ../cli-games-<name>
-# so several agents can build in parallel without colliding. Merges stay
-# conflict-free because each only adds files + two append-only registry lines.
+# Without --run it only prints the commands, so you can paste each into its own
+# terminal (recommended: you watch each session). With --run it launches them in
+# the background via `claude -p` (headless, non-interactive).
 
 set -euo pipefail
 
+run=false
+if [ "${1:-}" = "--run" ]; then
+  run=true
+  shift
+fi
+
 if [ "$#" -eq 0 ]; then
-  echo "usage: $0 <game> [game...]" >&2
+  echo "usage: $0 [--run] <game> [game...]" >&2
   echo "example: $0 tetris 2048 minesweeper" >&2
   exit 1
 fi
 
-repo_root="$(git rev-parse --show-toplevel)"
-cd "$repo_root"
-
-# Make sure local main is current so every worktree branches from the same base.
-git fetch --quiet origin main || true
-
-echo "Repo: $repo_root"
-echo
+prompt_for() {
+  local game="$1"
+  printf '%s' "Implement the '${game}' mini-game for this Rust workspace. Read CLAUDE.md and docs/ADD_A_GAME.md FIRST. Add ONLY crates/games/${game}/ plus the two append-only lines in crates/games/_registry/. Do NOT touch core/, app/, or other games, and never run bare 'cargo fmt'. Verify with: cargo build && cargo run -p cli-games -- ${game}."
+}
 
 for raw in "$@"; do
-  # Normalize: lowercase, spaces/underscores -> hyphens.
-  name="$(echo "$raw" | tr '[:upper:] _' '[:lower:]--')"
-  branch="game/${name}"
-  worktree="${repo_root}/../cli-games-${name}"
+  game="$(echo "$raw" | tr '[:upper:] _' '[:lower:]--')"
+  prompt="$(prompt_for "$game")"
 
-  if git show-ref --quiet "refs/heads/${branch}"; then
-    echo "⚠ branch ${branch} already exists — skipping ${name}"
-    continue
+  if [ "$run" = true ]; then
+    echo "▶ launching '$game' (headless, background)…"
+    claude -p --worktree "$game" "$prompt" &
+  else
+    echo "# --- $game ---"
+    echo "claude --worktree $game \"$prompt\""
+    echo
   fi
-  if [ -e "$worktree" ]; then
-    echo "⚠ ${worktree} already exists — skipping ${name}"
-    continue
-  fi
-
-  git worktree add -b "$branch" "$worktree" main >/dev/null
-  echo "✓ ${name}"
-  echo "    worktree: ${worktree}"
-  echo "    branch:   ${branch}"
-  echo "    launch:   (cd \"${worktree}\" && claude \"$(printf '%s' "Implement the '${name}' mini-game. Read CLAUDE.md and docs/ADD_A_GAME.md first, then add ONLY crates/games/${name}/ plus the two append-only registry lines. Verify with: cargo build && cargo run -p cli-games -- ${name}.")\")"
-  echo
 done
 
-echo "When a game is done, from its worktree:"
-echo "    git add -A && git commit -m \"feat(<game>): implement <game>\" && git push -u origin game/<game>"
-echo "    gh pr create --fill"
-echo
-echo "Clean up a finished worktree:  git worktree remove ../cli-games-<game>"
+if [ "$run" = true ]; then
+  echo "All sessions launched in the background. Wait for them with: wait"
+  echo "Each worktree lives under .claude/worktrees/<game>/ until the session exits."
+fi
