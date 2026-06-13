@@ -15,7 +15,11 @@ use game_core::registered_games;
 use games_all as _;
 
 #[derive(Parser)]
-#[command(name = "cli-games", version, about = "A collection of terminal mini-games")]
+#[command(
+    name = "cli-games",
+    version,
+    about = "A collection of terminal mini-games"
+)]
 struct Cli {
     /// Launch a specific game directly by its id (skips the menu).
     game: Option<String>,
@@ -26,19 +30,19 @@ fn main() -> Result<()> {
     let games = registered_games();
 
     // Validate before touching the terminal so errors stay readable.
-    if let Some(id) = &cli.game {
-        if !games.iter().any(|e| e.id == id) {
-            eprintln!("Unknown game '{id}'.");
-            if games.is_empty() {
-                eprintln!("No games are registered yet.");
-            } else {
-                eprintln!("Available games:");
-                for e in &games {
-                    eprintln!("  {:<12} {}", e.id, e.description);
-                }
+    if let Some(id) = &cli.game
+        && !games.iter().any(|e| e.id == id)
+    {
+        eprintln!("Unknown game '{id}'.");
+        if games.is_empty() {
+            eprintln!("No games are registered yet.");
+        } else {
+            eprintln!("Available games:");
+            for e in &games {
+                eprintln!("  {:<12} {}", e.id, e.description);
             }
-            std::process::exit(1);
         }
+        std::process::exit(1);
     }
 
     let mut term = runner::setup_terminal()?;

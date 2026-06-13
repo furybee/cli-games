@@ -123,8 +123,16 @@ impl Game for Memory {
     }
 
     fn render(&mut self, frame: &mut Frame, area: Rect) {
-        let found = self.cards.iter().filter(|c| c.face == Face::Matched).count() / 2;
-        let title = format!(" Memory  ·  pairs {found}/{PAIRS}  ·  moves {} ", self.moves);
+        let found = self
+            .cards
+            .iter()
+            .filter(|c| c.face == Face::Matched)
+            .count()
+            / 2;
+        let title = format!(
+            " Memory  ·  pairs {found}/{PAIRS}  ·  moves {} ",
+            self.moves
+        );
 
         // Card cell is 8 wide (6 inner + 2 border), 3 tall, with a 1-space gap.
         let board_w = (COLS * 8 + (COLS - 1)) as u16;

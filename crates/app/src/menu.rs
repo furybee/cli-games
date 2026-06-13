@@ -23,23 +23,25 @@ pub fn run_menu(term: &mut Term) -> Result<Option<&'static GameEntry>> {
     loop {
         term.draw(|f| draw(f, &games, &mut state))?;
 
-        if event::poll(Duration::from_millis(200))? {
-            if let Event::Key(key) = event::read()? {
-                if key.kind != KeyEventKind::Press {
-                    continue;
-                }
-                match key.code {
-                    KeyCode::Char('q') | KeyCode::Esc => return Ok(None),
-                    KeyCode::Down | KeyCode::Char('j') => move_selection(&mut state, games.len(), 1),
-                    KeyCode::Up | KeyCode::Char('k') => move_selection(&mut state, games.len(), -1),
-                    KeyCode::Enter => {
-                        if let Some(entry) = state.selected().and_then(|i| games.get(i)) {
-                            return Ok(Some(*entry));
-                        }
-                    }
-                    _ => {}
+        if !event::poll(Duration::from_millis(200))? {
+            continue;
+        }
+        let Event::Key(key) = event::read()? else {
+            continue;
+        };
+        if key.kind != KeyEventKind::Press {
+            continue;
+        }
+        match key.code {
+            KeyCode::Char('q') | KeyCode::Esc => return Ok(None),
+            KeyCode::Down | KeyCode::Char('j') => move_selection(&mut state, games.len(), 1),
+            KeyCode::Up | KeyCode::Char('k') => move_selection(&mut state, games.len(), -1),
+            KeyCode::Enter => {
+                if let Some(entry) = state.selected().and_then(|i| games.get(i)) {
+                    return Ok(Some(*entry));
                 }
             }
+            _ => {}
         }
     }
 }

@@ -136,7 +136,10 @@ impl Game for Snake {
         frame.render_widget(Paragraph::new(lines), inner);
 
         if self.dead {
-            let msg = format!(" GAME OVER · score {} · Enter: replay · q: menu ", self.score);
+            let msg = format!(
+                " GAME OVER · score {} · Enter: replay · q: menu ",
+                self.score
+            );
             let overlay = centered(msg.chars().count() as u16 + 2, 3, area);
             frame.render_widget(Clear, overlay);
             frame.render_widget(
@@ -177,7 +180,7 @@ impl Snake {
         // Self-collision (the tail tip will move away unless we just ate).
         let eats = next == self.food;
         let tail = *self.body.back().expect("tail exists");
-        if self.body.iter().any(|&c| c == next) && !(next == tail && !eats) {
+        if self.body.iter().any(|&c| c == next) && (next != tail || eats) {
             self.dead = true;
             return;
         }
