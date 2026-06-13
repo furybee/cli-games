@@ -19,7 +19,9 @@ use ratatui::widgets::{Block, Borders, Clear, Paragraph};
 
 /// Playfield dimensions in cells. Each cell renders as one character.
 const WIDTH: u16 = 40;
-const HEIGHT: u16 = 24;
+// Kept compact so the whole field (incl. the bottom cannon row) fits terminals
+// that aren't very tall.
+const HEIGHT: u16 = 20;
 
 /// Alien grid layout.
 const COLS: u16 = 8;
@@ -32,8 +34,10 @@ const PLAYER_ROW: u16 = HEIGHT - 1;
 
 /// How fast things move (cells per second).
 const PLAYER_SPEED: f32 = 22.0;
-const PLAYER_BULLET_SPEED: f32 = 38.0;
+const PLAYER_BULLET_SPEED: f32 = 50.0;
 const ALIEN_BULLET_SPEED: f32 = 16.0;
+/// Minimum delay between player shots (several bullets may be airborne).
+const PLAYER_FIRE_COOLDOWN: f32 = 0.22;
 
 /// Starting lives.
 const START_LIVES: u8 = 3;
@@ -57,7 +61,10 @@ pub struct Spaceinvaders {
     drop_pending: u16,
     /// Cannon column (fractional for smooth movement).
     player_x: f32,
-    player_bullet: Option<Bullet>,
+    /// Player shots currently in flight (several allowed for a snappy fire rate).
+    player_bullets: Vec<Bullet>,
+    /// Cooldown before the cannon can fire again.
+    player_fire_cd: f32,
     alien_bullets: Vec<Bullet>,
     /// Time since last alien firing attempt.
     fire_timer: f32,
@@ -78,7 +85,8 @@ impl Game for Spaceinvaders {
             dir: 1.0,
             drop_pending: 0,
             player_x: (WIDTH / 2) as f32,
-            player_bullet: None,
+            player_bullets: Vec::new(),
+            player_fire_cd: 0.0,
             alien_bullets: Vec::new(),
             fire_timer: 0.0,
             lives: START_LIVES,
@@ -106,21 +114,23 @@ impl Game for Spaceinvaders {
 
         let dt = ctx.dt.as_secs_f32();
 
-        // Cannon movement.
-        if ctx.pressed(KeyCode::Left) {
+        // Cannon movement — `held` keeps it gliding while the key is down.
+        if ctx.held(KeyCode::Left) {
             self.player_x -= PLAYER_SPEED * dt;
         }
-        if ctx.pressed(KeyCode::Right) {
+        if ctx.held(KeyCode::Right) {
             self.player_x += PLAYER_SPEED * dt;
         }
         self.player_x = self.player_x.clamp(0.0, (WIDTH - 1) as f32);
 
-        // Fire — one player bullet on screen at a time.
-        if ctx.pressed(KeyCode::Char(' ')) && self.player_bullet.is_none() {
-            self.player_bullet = Some(Bullet {
+        // Fire — rapid, several bullets allowed, gated by a short cooldown.
+        self.player_fire_cd = (self.player_fire_cd - dt).max(0.0);
+        if ctx.held(KeyCode::Char(' ')) && self.player_fire_cd <= 0.0 {
+            self.player_bullets.push(Bullet {
                 x: self.player_x.round() as u16,
                 y: (PLAYER_ROW - 1) as f32,
             });
+            self.player_fire_cd = PLAYER_FIRE_COOLDOWN;
         }
 
         self.advance_player_bullet(dt);
@@ -173,8 +183,8 @@ impl Game for Spaceinvaders {
             }
         }
 
-        // Player bullet.
-        if let Some(b) = self.player_bullet {
+        // Player bullets.
+        for b in &self.player_bullets {
             let by = b.y.round();
             if (0.0..HEIGHT as f32).contains(&by) && b.x < WIDTH {
                 grid[by as usize][b.x as usize] =
@@ -255,7 +265,8 @@ impl Spaceinvaders {
         self.block_y = 2.0;
         self.dir = 1.0;
         self.drop_pending = 0;
-        self.player_bullet = None;
+        self.player_bullets.clear();
+        self.player_fire_cd = 0.0;
         self.alien_bullets.clear();
         self.fire_timer = 0.0;
     }
@@ -286,9 +297,10 @@ impl Spaceinvaders {
     fn advance_aliens(&mut self, dt: f32) {
         let total = (COLS * ROWS) as f32;
         let alive = self.alive_count() as f32;
-        // Base speed grows with the wave and as the swarm thins.
-        let thin_factor = 1.0 + (total - alive) / total * 3.0;
-        let speed = (4.0 + self.wave as f32) * thin_factor;
+        // Base speed grows with the wave and (gently) as the swarm thins, so
+        // the last few aliens stay catchable instead of zooming to the bottom.
+        let thin_factor = 1.0 + (total - alive) / total * 1.2;
+        let speed = (3.0 + self.wave as f32 * 0.6) * thin_factor;
 
         // Apply any pending drop smoothly before resuming horizontal march.
         if self.drop_pending > 0 {
@@ -368,33 +380,30 @@ impl Spaceinvaders {
     }
 
     fn advance_player_bullet(&mut self, dt: f32) {
-        let Some(mut b) = self.player_bullet else {
-            return;
-        };
-        b.y -= PLAYER_BULLET_SPEED * dt;
-        if b.y < 0.0 {
-            self.player_bullet = None;
-            return;
-        }
-
-        // Hit test against aliens.
-        let by = b.y.round() as u16;
-        for row in 0..ROWS {
-            for col in 0..COLS {
-                if !self.alien_alive(col, row) {
-                    continue;
-                }
-                let (ax, ay) = self.alien_cell(col, row);
-                if ax == b.x && ay == by {
-                    self.aliens[Self::alien_index(col, row)] = false;
-                    self.score += 10 + (ROWS - 1 - row) as u32 * 5;
-                    self.player_bullet = None;
-                    return;
+        let mut bullets = std::mem::take(&mut self.player_bullets);
+        bullets.retain_mut(|b| {
+            b.y -= PLAYER_BULLET_SPEED * dt;
+            if b.y < 0.0 {
+                return false; // left the top of the field
+            }
+            // Hit test against aliens.
+            let by = b.y.round() as u16;
+            for row in 0..ROWS {
+                for col in 0..COLS {
+                    if !self.alien_alive(col, row) {
+                        continue;
+                    }
+                    let (ax, ay) = self.alien_cell(col, row);
+                    if ax == b.x && ay == by {
+                        self.aliens[Self::alien_index(col, row)] = false;
+                        self.score += 10 + (ROWS - 1 - row) as u32 * 5;
+                        return false; // bullet consumed
+                    }
                 }
             }
-        }
-
-        self.player_bullet = Some(b);
+            true
+        });
+        self.player_bullets = bullets;
     }
 
     fn advance_alien_bullets(&mut self, dt: f32) {

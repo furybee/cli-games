@@ -8,7 +8,6 @@
 
 use game_2048 as _;
 use game_anagram as _;
-use game_asteroids as _;
 use game_blackjack as _;
 use game_boggle as _;
 use game_breakout as _;

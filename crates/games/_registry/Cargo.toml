@@ -13,7 +13,6 @@ repository.workspace = true
 [dependencies]
 game_2048 = { path = "../2048" }
 game_anagram = { path = "../anagram" }
-game_asteroids = { path = "../asteroids" }
 game_blackjack = { path = "../blackjack" }
 game_boggle = { path = "../boggle" }
 game_breakout = { path = "../breakout" }

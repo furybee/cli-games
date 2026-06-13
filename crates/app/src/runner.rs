@@ -1,10 +1,11 @@
 //! Terminal setup/teardown and the per-game frame loop.
 
+use std::collections::HashMap;
 use std::io::{self, Stdout};
 use std::time::{Duration, Instant};
 
 use anyhow::Result;
-use game_core::{Game, GameContext, Transition};
+use game_core::{Game, GameContext, KeyCode, KeyEventKind, Transition};
 use ratatui::Terminal;
 use ratatui::backend::CrosstermBackend;
 use ratatui::crossterm::event::{self, Event};
@@ -46,11 +47,19 @@ pub fn restore_terminal(term: &mut Term) -> Result<()> {
     Ok(())
 }
 
+/// A key stays "held" for this long after its last press/repeat. Long enough to
+/// bridge the terminal's auto-repeat gap (so holding feels continuous), short
+/// enough that a single tap only nudges.
+const HELD_WINDOW: Duration = Duration::from_millis(150);
+
 /// Drive a single game until it returns [`Transition::Exit`] (or Ctrl+C).
 pub fn run_game(term: &mut Term, game: &mut dyn Game) -> Result<()> {
     let tick = game.tick_rate();
     let start = Instant::now();
     let mut last = Instant::now();
+    // Last time each key was seen down, used to synthesise a "held" state since
+    // terminals never send key-release events.
+    let mut last_press: HashMap<KeyCode, Instant> = HashMap::new();
 
     loop {
         term.draw(|f| {
@@ -72,7 +81,16 @@ pub fn run_game(term: &mut Term, game: &mut dyn Game) -> Result<()> {
         let dt = now.duration_since(last);
         last = now;
 
-        let ctx = GameContext::new(keys, dt, start.elapsed());
+        // Refresh held-key timestamps, then expire anything past the window.
+        for key in &keys {
+            if key.kind == KeyEventKind::Press {
+                last_press.insert(key.code, now);
+            }
+        }
+        last_press.retain(|_, t| now.duration_since(*t) < HELD_WINDOW);
+        let held: Vec<KeyCode> = last_press.keys().copied().collect();
+
+        let ctx = GameContext::new(keys, held, dt, start.elapsed());
         if ctx.quit_requested() {
             break;
         }

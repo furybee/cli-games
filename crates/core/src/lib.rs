@@ -31,6 +31,10 @@ pub enum Transition {
 /// of the runner's poll rate (accumulate `dt` to drive movement).
 pub struct GameContext {
     keys: Vec<KeyEvent>,
+    /// Keys considered "held": pressed recently enough that the runner treats
+    /// them as still down. Terminals don't send key-release events and only
+    /// auto-repeat after a delay, so this is what continuous movement should use.
+    held: Vec<KeyCode>,
     /// Time elapsed since the previous update.
     pub dt: Duration,
     /// Time elapsed since the game started.
@@ -39,8 +43,13 @@ pub struct GameContext {
 
 impl GameContext {
     /// Build a context. Called by the runner, not by games.
-    pub fn new(keys: Vec<KeyEvent>, dt: Duration, elapsed: Duration) -> Self {
-        Self { keys, dt, elapsed }
+    pub fn new(keys: Vec<KeyEvent>, held: Vec<KeyCode>, dt: Duration, elapsed: Duration) -> Self {
+        Self {
+            keys,
+            held,
+            dt,
+            elapsed,
+        }
     }
 
     /// Every key event received since the last update.
@@ -48,11 +57,19 @@ impl GameContext {
         &self.keys
     }
 
-    /// `true` if `code` was pressed during this tick.
+    /// `true` if `code` was pressed during this tick. Use for discrete actions
+    /// (fire, confirm, change direction once).
     pub fn pressed(&self, code: KeyCode) -> bool {
         self.keys
             .iter()
             .any(|k| k.kind == KeyEventKind::Press && k.code == code)
+    }
+
+    /// `true` while `code` is considered held down. Use for *continuous* motion
+    /// (a paddle, a thrusting ship) so it doesn't stutter with the terminal's
+    /// key-repeat delay. Combine with `ctx.dt` for frame-rate-independent speed.
+    pub fn held(&self, code: KeyCode) -> bool {
+        self.held.contains(&code)
     }
 
     /// `true` if the user asked to force-quit (Ctrl+C). The runner handles this

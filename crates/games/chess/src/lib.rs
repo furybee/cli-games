@@ -65,20 +65,22 @@ struct Piece {
 }
 
 impl Piece {
-    fn glyph(self) -> &'static str {
-        match (self.side, self.kind) {
-            (Side::White, Kind::Pawn) => "♙",
-            (Side::White, Kind::Knight) => "♘",
-            (Side::White, Kind::Bishop) => "♗",
-            (Side::White, Kind::Rook) => "♖",
-            (Side::White, Kind::Queen) => "♕",
-            (Side::White, Kind::King) => "♔",
-            (Side::Black, Kind::Pawn) => "♟",
-            (Side::Black, Kind::Knight) => "♞",
-            (Side::Black, Kind::Bishop) => "♝",
-            (Side::Black, Kind::Rook) => "♜",
-            (Side::Black, Kind::Queen) => "♛",
-            (Side::Black, Kind::King) => "♚",
+    /// A single ASCII letter for the piece: uppercase = White, lowercase = Black.
+    /// ASCII keeps every board cell exactly one column wide, which Unicode chess
+    /// glyphs do not (they're ambiguous/double-width and break alignment).
+    fn letter(self) -> char {
+        let c = match self.kind {
+            Kind::Pawn => 'p',
+            Kind::Knight => 'n',
+            Kind::Bishop => 'b',
+            Kind::Rook => 'r',
+            Kind::Queen => 'q',
+            Kind::King => 'k',
+        };
+        if self.side == Side::White {
+            c.to_ascii_uppercase()
+        } else {
+            c
         }
     }
 }
@@ -715,8 +717,9 @@ impl Game for Chess {
                                 || (p.side == Side::Black && check_black))
                     );
 
+                    // Every cell is exactly 4 columns wide so ranks stay aligned.
                     let content = match (row, piece) {
-                        (0, Some(p)) => format!(" {} ", p.glyph()),
+                        (0, Some(p)) => format!(" {}  ", p.letter()),
                         _ => "    ".to_string(),
                     };
                     let fg = match piece {

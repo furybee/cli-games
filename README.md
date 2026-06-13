@@ -9,7 +9,7 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Rust 2024](https://img.shields.io/badge/rust-2024-orange.svg)](https://www.rust-lang.org)
 
-**36 games** — Snake · Tetris · 2048 · Minesweeper · Pong · Wordle · Chess · Sokoban ·
+**35 games** — Snake · Tetris · 2048 · Minesweeper · Pong · Wordle · Chess · Sokoban ·
 Breakout · Solitaire · and many more, all in your terminal, built on [ratatui](https://ratatui.rs).
 
 </div>
@@ -55,13 +55,12 @@ cli-games snake      # launch a game directly by id
 
 ## The games
 
-All 36 games, launched from the menu or directly with `cli-games <id>`:
+All 35 games, launched from the menu or directly with `cli-games <id>`:
 
 | Game | Description |
 |------|-------------|
 | **2048** | Slide tiles, merge equal numbers, reach 2048. |
 | **anagram** | Unscramble the word before the timer runs out. |
-| **asteroids** | Rotate, thrust and shoot drifting space rocks. |
 | **blackjack** | Beat the dealer at 21: bet, hit, stand, double. |
 | **boggle** | Trace adjacent letters to spell words against the clock. |
 | **breakout** | Bounce a ball, smash every brick, don't drop it. |

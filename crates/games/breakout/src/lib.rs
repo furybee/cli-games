@@ -27,12 +27,12 @@ const BRICK_COLS: u16 = WIDTH; // one brick per column
 /// Paddle geometry.
 const PADDLE_WIDTH: f32 = 5.0;
 const PADDLE_ROW: u16 = HEIGHT - 1;
-const PADDLE_SPEED: f32 = 28.0; // cells per second
+const PADDLE_SPEED: f32 = 38.0; // cells per second
 
 /// Ball speed in cells per second, and how fast it ramps up per life.
 const BALL_START_SPEED: f32 = 14.0;
-const BALL_MAX_SPEED: f32 = 34.0;
-const BALL_ACCEL: f32 = 1.2; // added speed per second of play
+const BALL_MAX_SPEED: f32 = 26.0;
+const BALL_ACCEL: f32 = 0.45; // added speed per second of play
 
 const START_LIVES: u32 = 3;
 
@@ -100,13 +100,13 @@ impl Game for Breakout {
 
         let dt = ctx.dt.as_secs_f32();
 
-        // Paddle movement (continuous while held — `pressed` reports any press
-        // during the tick, which at this poll rate feels smooth).
+        // Paddle movement — `held` keeps it gliding smoothly while a key is down,
+        // independent of the terminal's key-repeat cadence.
         let half = PADDLE_WIDTH / 2.0;
-        if ctx.pressed(KeyCode::Left) || ctx.pressed(KeyCode::Char('a')) {
+        if ctx.held(KeyCode::Left) || ctx.held(KeyCode::Char('a')) {
             self.paddle_x -= PADDLE_SPEED * dt;
         }
-        if ctx.pressed(KeyCode::Right) || ctx.pressed(KeyCode::Char('d')) {
+        if ctx.held(KeyCode::Right) || ctx.held(KeyCode::Char('d')) {
             self.paddle_x += PADDLE_SPEED * dt;
         }
         self.paddle_x = self.paddle_x.clamp(half, WIDTH as f32 - half);
