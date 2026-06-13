@@ -1,0 +1,11 @@
+[package]
+name = "game_wordle"
+description = "Wordle — guess the hidden five-letter word in six tries"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+game_core.workspace = true
+ratatui.workspace = true

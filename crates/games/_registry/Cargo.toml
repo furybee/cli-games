@@ -14,6 +14,7 @@ repository.workspace = true
 game_2048 = { path = "../2048" }
 game_dinorun = { path = "../dinorun" }
 game_flappy = { path = "../flappy" }
+game_hangman = { path = "../hangman" }
 game_memory = { path = "../memory" }
 game_minesweeper = { path = "../minesweeper" }
 game_pong = { path = "../pong" }
@@ -22,3 +23,4 @@ game_solitaire = { path = "../solitaire" }
 game_sudoku = { path = "../sudoku" }
 game_tetris = { path = "../tetris" }
 game_tictactoe = { path = "../tictactoe" }
+game_wordle = { path = "../wordle" }

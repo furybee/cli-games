@@ -9,6 +9,7 @@
 use game_2048 as _;
 use game_dinorun as _;
 use game_flappy as _;
+use game_hangman as _;
 use game_memory as _;
 use game_minesweeper as _;
 use game_pong as _;
@@ -17,3 +18,4 @@ use game_solitaire as _;
 use game_sudoku as _;
 use game_tetris as _;
 use game_tictactoe as _;
+use game_wordle as _;

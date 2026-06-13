@@ -282,6 +282,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "game_hangman"
+version = "0.1.0"
+dependencies = [
+ "game_core",
+ "ratatui",
+]
+
+[[package]]
 name = "game_memory"
 version = "0.1.0"
 dependencies = [
@@ -346,12 +354,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "game_wordle"
+version = "0.1.0"
+dependencies = [
+ "game_core",
+ "ratatui",
+]
+
+[[package]]
 name = "games_all"
 version = "0.1.0"
 dependencies = [
  "game_2048",
  "game_dinorun",
  "game_flappy",
+ "game_hangman",
  "game_memory",
  "game_minesweeper",
  "game_pong",
@@ -360,6 +377,7 @@ dependencies = [
  "game_sudoku",
  "game_tetris",
  "game_tictactoe",
+ "game_wordle",
 ]
 
 [[package]]
