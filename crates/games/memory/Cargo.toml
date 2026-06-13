@@ -1,0 +1,11 @@
+[package]
+name = "game_memory"
+description = "Memory — flip cards and match the pairs"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+game_core.workspace = true
+ratatui.workspace = true

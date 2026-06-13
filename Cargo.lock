@@ -250,10 +250,58 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d9c4f5dac5e15c24eb999c26181a6ca40b39fe946cbe4c263c7209467bc83af2"
 
 [[package]]
+name = "game_2048"
+version = "0.1.0"
+dependencies = [
+ "game_core",
+ "ratatui",
+]
+
+[[package]]
 name = "game_core"
 version = "0.1.0"
 dependencies = [
  "inventory",
+ "ratatui",
+]
+
+[[package]]
+name = "game_dinorun"
+version = "0.1.0"
+dependencies = [
+ "game_core",
+ "ratatui",
+]
+
+[[package]]
+name = "game_flappy"
+version = "0.1.0"
+dependencies = [
+ "game_core",
+ "ratatui",
+]
+
+[[package]]
+name = "game_memory"
+version = "0.1.0"
+dependencies = [
+ "game_core",
+ "ratatui",
+]
+
+[[package]]
+name = "game_minesweeper"
+version = "0.1.0"
+dependencies = [
+ "game_core",
+ "ratatui",
+]
+
+[[package]]
+name = "game_pong"
+version = "0.1.0"
+dependencies = [
+ "game_core",
  "ratatui",
 ]
 
@@ -266,10 +314,52 @@ dependencies = [
 ]
 
 [[package]]
+name = "game_solitaire"
+version = "0.1.0"
+dependencies = [
+ "game_core",
+ "ratatui",
+]
+
+[[package]]
+name = "game_sudoku"
+version = "0.1.0"
+dependencies = [
+ "game_core",
+ "ratatui",
+]
+
+[[package]]
+name = "game_tetris"
+version = "0.1.0"
+dependencies = [
+ "game_core",
+ "ratatui",
+]
+
+[[package]]
+name = "game_tictactoe"
+version = "0.1.0"
+dependencies = [
+ "game_core",
+ "ratatui",
+]
+
+[[package]]
 name = "games_all"
 version = "0.1.0"
 dependencies = [
+ "game_2048",
+ "game_dinorun",
+ "game_flappy",
+ "game_memory",
+ "game_minesweeper",
+ "game_pong",
  "game_snake",
+ "game_solitaire",
+ "game_sudoku",
+ "game_tetris",
+ "game_tictactoe",
 ]
 
 [[package]]

@@ -1,0 +1,11 @@
+[package]
+name = "game_2048"
+description = "2048 — slide tiles, merge equal numbers, reach 2048"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+game_core.workspace = true
+ratatui.workspace = true

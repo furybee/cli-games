@@ -1,0 +1,11 @@
+[package]
+name = "game_sudoku"
+description = "Sudoku — fill the grid so every row, column, and box holds 1–9"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+game_core.workspace = true
+ratatui.workspace = true

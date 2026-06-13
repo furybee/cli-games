@@ -1,0 +1,11 @@
+[package]
+name = "game_tetris"
+description = "Tetris — stack falling tetrominoes and clear lines"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+game_core.workspace = true
+ratatui.workspace = true

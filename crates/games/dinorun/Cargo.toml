@@ -1,0 +1,11 @@
+[package]
+name = "game_dinorun"
+description = "Dino Run — jump the cacti, an endless terminal runner"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+game_core.workspace = true
+ratatui.workspace = true

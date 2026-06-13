@@ -1,0 +1,11 @@
+[package]
+name = "game_minesweeper"
+description = "Classic Minesweeper — clear the field without detonating a mine"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+game_core.workspace = true
+ratatui.workspace = true

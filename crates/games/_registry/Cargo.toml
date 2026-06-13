@@ -11,4 +11,14 @@ repository.workspace = true
 # Keep the list alphabetical and append-only — that keeps Git merges conflict-free.
 # ─────────────────────────────────────────────────────────────────────────────
 [dependencies]
+game_2048 = { path = "../2048" }
+game_dinorun = { path = "../dinorun" }
+game_flappy = { path = "../flappy" }
+game_memory = { path = "../memory" }
+game_minesweeper = { path = "../minesweeper" }
+game_pong = { path = "../pong" }
 game_snake = { path = "../snake" }
+game_solitaire = { path = "../solitaire" }
+game_sudoku = { path = "../sudoku" }
+game_tetris = { path = "../tetris" }
+game_tictactoe = { path = "../tictactoe" }

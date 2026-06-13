@@ -1,0 +1,11 @@
+[package]
+name = "game_flappy"
+description = "Flappy — tap to flap through the pipes"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+game_core.workspace = true
+ratatui.workspace = true

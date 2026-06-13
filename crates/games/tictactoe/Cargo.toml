@@ -1,0 +1,11 @@
+[package]
+name = "game_tictactoe"
+description = "Tic-Tac-Toe — you (X) versus an unbeatable AI (O)"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+game_core.workspace = true
+ratatui.workspace = true

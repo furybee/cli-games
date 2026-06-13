@@ -1,0 +1,11 @@
+[package]
+name = "game_pong"
+description = "Pong — you versus a chasing CPU paddle"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+game_core.workspace = true
+ratatui.workspace = true
