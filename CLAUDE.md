@@ -66,8 +66,15 @@ cargo build                         # whole workspace must compile
 cargo run -p cli-games -- <game>    # launch your game directly
 cargo run -p cli-games              # menu — confirm your game appears
 cargo clippy -p game_<game>         # keep it warning-clean
-cargo fmt
+cargo fmt -p game_<game>            # format ONLY your crate — never bare `cargo fmt`
 ```
+
+**Never run bare `cargo fmt`, `cargo clippy --fix`, or any workspace-wide
+formatter.** They rewrite shared files (`app/`, `core/`, other games) and pollute
+your PR with conflicts. Always scope with `-p game_<game>`. Before committing,
+run `git status` — the ONLY paths you may have changed are `crates/games/<game>/`,
+`crates/games/_registry/` (two append lines), and `Cargo.lock`. If anything else
+is modified, revert it: `git checkout -- <that-path>`.
 
 Your game is done when: it builds clean, appears in the menu, plays, and returns
 to the menu on `q`/`Esc`.
