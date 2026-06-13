@@ -20,7 +20,22 @@ pub fn setup_terminal() -> Result<Term> {
     enable_raw_mode()?;
     let mut stdout = io::stdout();
     execute!(stdout, EnterAlternateScreen)?;
+    drain_startup_input()?;
     Ok(Terminal::new(CrosstermBackend::new(stdout))?)
+}
+
+/// Some terminals emit an escape sequence right after we switch to raw mode
+/// (query responses, focus-in events, …). Discard anything that arrives in a
+/// short window so it isn't misread as a keypress — otherwise a stray `Esc`
+/// can instantly quit a menu or game that treats `Esc` as "back".
+fn drain_startup_input() -> Result<()> {
+    let deadline = Instant::now() + Duration::from_millis(150);
+    while Instant::now() < deadline {
+        if event::poll(Duration::from_millis(15))? {
+            let _ = event::read()?;
+        }
+    }
+    Ok(())
 }
 
 /// Restore the terminal to its original state. Always call this, even on error.

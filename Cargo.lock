@@ -133,7 +133,7 @@ checksum = "c8d4a3bb8b1e0c1050499d1815f5ab16d04f0959b233085fb31653fbfc9d98f9"
 
 [[package]]
 name = "cli-games"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "anyhow",
  "clap",
@@ -251,7 +251,7 @@ checksum = "d9c4f5dac5e15c24eb999c26181a6ca40b39fe946cbe4c263c7209467bc83af2"
 
 [[package]]
 name = "game_2048"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "game_core",
  "ratatui",
@@ -259,7 +259,7 @@ dependencies = [
 
 [[package]]
 name = "game_core"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "inventory",
  "ratatui",
@@ -267,7 +267,7 @@ dependencies = [
 
 [[package]]
 name = "game_dinorun"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "game_core",
  "ratatui",
@@ -275,7 +275,7 @@ dependencies = [
 
 [[package]]
 name = "game_flappy"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "game_core",
  "ratatui",
@@ -283,7 +283,7 @@ dependencies = [
 
 [[package]]
 name = "game_hangman"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "game_core",
  "ratatui",
@@ -291,7 +291,7 @@ dependencies = [
 
 [[package]]
 name = "game_memory"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "game_core",
  "ratatui",
@@ -299,7 +299,7 @@ dependencies = [
 
 [[package]]
 name = "game_minesweeper"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "game_core",
  "ratatui",
@@ -307,7 +307,7 @@ dependencies = [
 
 [[package]]
 name = "game_pong"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "game_core",
  "ratatui",
@@ -315,7 +315,7 @@ dependencies = [
 
 [[package]]
 name = "game_snake"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "game_core",
  "ratatui",
@@ -323,7 +323,7 @@ dependencies = [
 
 [[package]]
 name = "game_solitaire"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "game_core",
  "ratatui",
@@ -331,7 +331,7 @@ dependencies = [
 
 [[package]]
 name = "game_sudoku"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "game_core",
  "ratatui",
@@ -339,7 +339,7 @@ dependencies = [
 
 [[package]]
 name = "game_tetris"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "game_core",
  "ratatui",
@@ -347,7 +347,7 @@ dependencies = [
 
 [[package]]
 name = "game_tictactoe"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "game_core",
  "ratatui",
@@ -355,7 +355,7 @@ dependencies = [
 
 [[package]]
 name = "game_wordle"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "game_core",
  "ratatui",
@@ -363,7 +363,7 @@ dependencies = [
 
 [[package]]
 name = "games_all"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "game_2048",
  "game_dinorun",
