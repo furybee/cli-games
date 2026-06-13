@@ -81,10 +81,15 @@ to the menu on `q`/`Esc`.
 
 ## Parallel workflow (for whoever orchestrates)
 
-One git worktree + branch per game so builds and commits don't collide:
+Give each game its own git worktree so builds and commits don't collide. The
+simplest way is Claude Code's built-in flag — it creates the worktree, starts a
+session in it, and cleans up on exit:
 ```bash
-git worktree add ../cli-games-<game> -b game/<game>
+claude --worktree <game> "Implement the '<game>' mini-game. Read CLAUDE.md and \
+docs/ADD_A_GAME.md, then add ONLY crates/games/<game>/ plus the two append-only \
+registry lines. Verify: cargo build && cargo run -p cli-games -- <game>."
 ```
-Point each agent at this file and `docs/ADD_A_GAME.md`, scoped to its one game.
-Merges stay conflict-free because every agent only adds files plus append-only
-registry lines.
+(Or manually: `git worktree add ../cli-games-<game> -b game/<game>`.)
+
+Each agent works in its one game only. Merges stay conflict-free because every
+agent adds files plus append-only registry lines — nothing shared is rewritten.
