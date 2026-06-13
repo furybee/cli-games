@@ -27,6 +27,9 @@ const STEP_SECS: f32 = 0.016;
 
 /// Vertical speeds, in cells per second.
 const PADDLE_SPEED: f32 = 26.0;
+/// A key press keeps the paddle moving for this long, so a single tap produces
+/// visible motion and a held key stays smooth despite terminal key-repeat delay.
+const MOVE_TTL: Duration = Duration::from_millis(130);
 /// The CPU is deliberately a touch slower than the player so it's beatable.
 const CPU_SPEED: f32 = 19.0;
 /// Initial horizontal ball speed; it ramps up slightly on every paddle hit.
@@ -44,8 +47,10 @@ pub struct Pong {
     /// Top edge of each paddle (left = player, right = CPU).
     player_y: f32,
     cpu_y: f32,
-    /// What the player asked for this tick.
+    /// The player's current paddle direction.
     player_move: Move,
+    /// How much longer the paddle keeps moving after the last key press.
+    move_ttl: Duration,
     ball_x: f32,
     ball_y: f32,
     ball_vx: f32,
@@ -64,6 +69,7 @@ impl Game for Pong {
             player_y: (HEIGHT - PADDLE_H) as f32 / 2.0,
             cpu_y: (HEIGHT - PADDLE_H) as f32 / 2.0,
             player_move: Move::None,
+            move_ttl: Duration::ZERO,
             ball_x: 0.0,
             ball_y: 0.0,
             ball_vx: 0.0,
@@ -90,14 +96,27 @@ impl Game for Pong {
             return Transition::Stay;
         }
 
-        // Continuous movement: terminal key-repeat re-fires Press while held.
-        self.player_move = if ctx.pressed(KeyCode::Up) || ctx.pressed(KeyCode::Char('w')) {
-            Move::Up
+        // A key press (re)starts the paddle and refreshes its move window. We
+        // don't rely on the key-repeat cadence to keep it moving.
+        if ctx.pressed(KeyCode::Up) || ctx.pressed(KeyCode::Char('w')) {
+            self.player_move = Move::Up;
+            self.move_ttl = MOVE_TTL;
         } else if ctx.pressed(KeyCode::Down) || ctx.pressed(KeyCode::Char('s')) {
-            Move::Down
-        } else {
-            Move::None
-        };
+            self.player_move = Move::Down;
+            self.move_ttl = MOVE_TTL;
+        }
+
+        // Move the paddle by real elapsed time while the window is open.
+        if self.move_ttl > Duration::ZERO {
+            let dist = PADDLE_SPEED * ctx.dt.as_secs_f32();
+            match self.player_move {
+                Move::Up => self.player_y -= dist,
+                Move::Down => self.player_y += dist,
+                Move::None => {}
+            }
+            self.player_y = clamp_paddle(self.player_y);
+            self.move_ttl = self.move_ttl.saturating_sub(ctx.dt);
+        }
 
         self.accumulator += ctx.dt;
         while self.accumulator >= STEP {
@@ -173,16 +192,9 @@ impl Game for Pong {
 }
 
 impl Pong {
-    /// Advance physics by one fixed [`STEP`].
+    /// Advance physics by one fixed [`STEP`]. The player paddle is moved in
+    /// `update` by real elapsed time; here we only step the CPU and the ball.
     fn physics(&mut self) {
-        // Player paddle.
-        match self.player_move {
-            Move::Up => self.player_y -= PADDLE_SPEED * STEP_SECS,
-            Move::Down => self.player_y += PADDLE_SPEED * STEP_SECS,
-            Move::None => {}
-        }
-        self.player_y = clamp_paddle(self.player_y);
-
         // CPU tracks the ball's centre with a capped speed.
         let target = self.ball_y - (PADDLE_H as f32 - 1.0) / 2.0;
         let max = CPU_SPEED * STEP_SECS;
