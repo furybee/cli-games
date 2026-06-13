@@ -1,27 +1,21 @@
 #!/usr/bin/env bash
 #
-# Batch-spawn one isolated Claude Code session per game, each in its own git
-# worktree, using Claude Code's built-in `--worktree` flag. The flag creates the
-# worktree (under .claude/worktrees/<game>/, branched from origin/HEAD), starts
-# Claude in it, and cleans it up on exit — so we don't manage worktrees by hand.
+# Print one ready-to-paste `claude --worktree <game>` command per game, so you
+# can launch each in its own terminal and watch it work. Claude Code's built-in
+# `--worktree` flag creates the worktree (under .claude/worktrees/<game>/,
+# branched from origin/HEAD), starts an interactive session in it, and cleans it
+# up on exit — so worktrees are never managed by hand.
 #
-#   ./scripts/spawn-games.sh tetris 2048 minesweeper      # print the commands
-#   ./scripts/spawn-games.sh --run tetris 2048            # actually launch them
+#   ./scripts/spawn-games.sh tetris 2048 minesweeper
 #
-# Without --run it only prints the commands, so you can paste each into its own
-# terminal (recommended: you watch each session). With --run it launches them in
-# the background via `claude -p` (headless, non-interactive).
+# Run each printed command in a separate terminal. Always run interactively:
+# headless background launches (`claude -p &`) detach from the terminal, give no
+# visibility, and can hang silently — don't go there.
 
 set -euo pipefail
 
-run=false
-if [ "${1:-}" = "--run" ]; then
-  run=true
-  shift
-fi
-
 if [ "$#" -eq 0 ]; then
-  echo "usage: $0 [--run] <game> [game...]" >&2
+  echo "usage: $0 <game> [game...]" >&2
   echo "example: $0 tetris 2048 minesweeper" >&2
   exit 1
 fi
@@ -33,19 +27,7 @@ prompt_for() {
 
 for raw in "$@"; do
   game="$(echo "$raw" | tr '[:upper:] _' '[:lower:]--')"
-  prompt="$(prompt_for "$game")"
-
-  if [ "$run" = true ]; then
-    echo "▶ launching '$game' (headless, background)…"
-    claude -p --worktree "$game" "$prompt" &
-  else
-    echo "# --- $game ---"
-    echo "claude --worktree $game \"$prompt\""
-    echo
-  fi
+  echo "# --- $game (run in its own terminal) ---"
+  echo "claude --worktree $game \"$(prompt_for "$game")\""
+  echo
 done
-
-if [ "$run" = true ]; then
-  echo "All sessions launched in the background. Wait for them with: wait"
-  echo "Each worktree lives under .claude/worktrees/<game>/ until the session exits."
-fi
