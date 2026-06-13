@@ -1,0 +1,11 @@
+[package]
+name = "game_spaceinvaders"
+description = "Defend Earth from a descending alien armada."
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+game_core.workspace = true
+ratatui.workspace = true

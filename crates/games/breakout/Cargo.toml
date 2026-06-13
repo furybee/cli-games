@@ -1,0 +1,11 @@
+[package]
+name = "game_breakout"
+description = "Bounce a ball, smash every brick, don't drop it."
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+game_core.workspace = true
+ratatui.workspace = true

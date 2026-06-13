@@ -1,0 +1,11 @@
+[package]
+name = "game_lightsout"
+description = "Toggle every light off — each press flips a cross of cells."
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+game_core.workspace = true
+ratatui.workspace = true

@@ -1,0 +1,11 @@
+[package]
+name = "game_typing"
+description = "Typing speed test with live accuracy and WPM."
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+game_core.workspace = true
+ratatui.workspace = true

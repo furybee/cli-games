@@ -1,0 +1,11 @@
+[package]
+name = "game_conway"
+description = "Conway's Game of Life on a toroidal grid."
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+game_core.workspace = true
+ratatui.workspace = true

@@ -1,0 +1,11 @@
+[package]
+name = "game_chess"
+description = "Play chess against a simple AI with full legal move rules."
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+game_core.workspace = true
+ratatui.workspace = true

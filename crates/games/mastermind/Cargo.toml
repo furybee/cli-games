@@ -1,0 +1,11 @@
+[package]
+name = "game_mastermind"
+description = "Crack the hidden 4-colour code in ten guesses."
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+game_core.workspace = true
+ratatui.workspace = true

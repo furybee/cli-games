@@ -1,0 +1,11 @@
+[package]
+name = "game_anagram"
+description = "Unscramble the word before the timer runs out."
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+game_core.workspace = true
+ratatui.workspace = true

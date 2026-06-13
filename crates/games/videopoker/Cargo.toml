@@ -1,0 +1,11 @@
+[package]
+name = "game_videopoker"
+description = "Jacks-or-Better video poker: hold, draw, and chase the royal flush."
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+game_core.workspace = true
+ratatui.workspace = true

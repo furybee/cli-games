@@ -1,0 +1,11 @@
+[package]
+name = "game_yahtzee"
+description = "Solo Yahtzee: roll five dice, fill a 13-category scorecard."
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+game_core.workspace = true
+ratatui.workspace = true

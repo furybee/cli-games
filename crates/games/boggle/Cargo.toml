@@ -1,0 +1,11 @@
+[package]
+name = "game_boggle"
+description = "Trace adjacent letters to spell words against the clock."
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+game_core.workspace = true
+ratatui.workspace = true

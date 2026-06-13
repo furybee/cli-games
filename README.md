@@ -9,8 +9,8 @@
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Rust 2024](https://img.shields.io/badge/rust-2024-orange.svg)](https://www.rust-lang.org)
 
-Snake · Tetris · 2048 · Minesweeper · Pong · Wordle · Sudoku · Solitaire · and more —
-all running in your terminal, built on [ratatui](https://ratatui.rs).
+**36 games** — Snake · Tetris · 2048 · Minesweeper · Pong · Wordle · Chess · Sokoban ·
+Breakout · Solitaire · and many more, all in your terminal, built on [ratatui](https://ratatui.rs).
 
 </div>
 
@@ -55,21 +55,46 @@ cli-games snake      # launch a game directly by id
 
 ## The games
 
+All 36 games, launched from the menu or directly with `cli-games <id>`:
+
 | Game | Description |
 |------|-------------|
-| 🐍 **snake** | Eat, grow, don't bite yourself. |
-| 🟦 **tetris** | Stack falling tetrominoes and clear lines. |
-| 🔢 **2048** | Slide tiles, merge equal numbers, reach 2048. |
-| 💣 **minesweeper** | Clear the field without detonating a mine. |
-| 🏓 **pong** | Volley past a chasing CPU paddle — first to 7 wins. |
-| 🟩 **wordle** | Guess the hidden five-letter word in six tries. |
-| 🔡 **hangman** | Guess the word before the gallows fill up. |
-| 🃏 **solitaire** | Klondike patience — clear the tableau to the foundations. |
-| 🧩 **sudoku** | Fill the grid so every row, column, and box holds 1–9. |
-| 🧠 **memory** | Flip cards two at a time and match the pairs. |
-| ⭕ **tictactoe** | Outsmart an unbeatable AI — or settle for a draw. |
-| 🦖 **dinorun** | Jump the cacti in an endless desert dash. |
-| 🐤 **flappy** | Tap to flap through the pipes. |
+| **2048** | Slide tiles, merge equal numbers, reach 2048. |
+| **anagram** | Unscramble the word before the timer runs out. |
+| **asteroids** | Rotate, thrust and shoot drifting space rocks. |
+| **blackjack** | Beat the dealer at 21: bet, hit, stand, double. |
+| **boggle** | Trace adjacent letters to spell words against the clock. |
+| **breakout** | Bounce a ball, smash every brick, don't drop it. |
+| **chess** | Full legal chess versus a simple minimax AI. |
+| **conway** | Conway's cellular automaton on a toroidal grid. |
+| **dinorun** | Jump the cacti in an endless desert dash. |
+| **flappy** | Tap to flap through the pipes. |
+| **freecell** | Classic FreeCell solitaire: free cells, foundations, eight cascades. |
+| **hangman** | Guess the word before the gallows fill up. |
+| **lightsout** | Flip crosses of lights until the board goes dark. |
+| **mastermind** | Crack the hidden 4-colour code in ten guesses. |
+| **maze** | Find the exit of a freshly generated perfect maze. |
+| **memory** | Flip cards two at a time and match the pairs. |
+| **minesweeper** | Clear the field without detonating a mine. |
+| **nonogram** | Solve the picture from row and column number clues. |
+| **peg** | Jump pegs across the cross until one remains. |
+| **pong** | Volley past a chasing CPU paddle — first to 7 wins. |
+| **racer** | Dodge traffic, ramp up speed, don't crash. |
+| **roguelike** | Explore a dungeon, fight monsters, reach the stairs. |
+| **simon** | Repeat the growing colour sequence. |
+| **slidepuzzle** | Slide the numbered tiles back into order. |
+| **snake** | Eat, grow, don't bite yourself. |
+| **sokoban** | Push every crate onto its target. |
+| **solitaire** | Klondike patience — clear the tableau to the foundations. |
+| **spaceinvaders** | Defend Earth from a descending alien armada. |
+| **sudoku** | Fill the grid so every row, column, and box holds 1–9. |
+| **tetris** | Stack falling tetrominoes and clear lines. |
+| **tictactoe** | Outsmart an unbeatable AI — or settle for a draw. |
+| **tron** | Light-cycle duel — out-survive the AI. |
+| **typing** | Type the sentence — measure your WPM and accuracy. |
+| **videopoker** | Jacks-or-Better: hold, draw, and chase the royal flush. |
+| **wordle** | Guess the hidden five-letter word in six tries. |
+| **yahtzee** | Roll five dice, fill the 13-category scorecard. |
 
 ## Architecture
 

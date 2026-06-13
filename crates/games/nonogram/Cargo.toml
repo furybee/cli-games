@@ -1,0 +1,11 @@
+[package]
+name = "game_nonogram"
+description = "Picture-logic puzzle: fill cells to match the row and column clues."
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+game_core.workspace = true
+ratatui.workspace = true

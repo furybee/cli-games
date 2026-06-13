@@ -1,0 +1,11 @@
+[package]
+name = "game_peg"
+description = "English peg solitaire — jump pegs until one remains."
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+game_core.workspace = true
+ratatui.workspace = true

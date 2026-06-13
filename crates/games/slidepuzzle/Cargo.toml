@@ -1,0 +1,11 @@
+[package]
+name = "game_slidepuzzle"
+description = "Slide the numbered tiles back into order."
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+game_core.workspace = true
+ratatui.workspace = true

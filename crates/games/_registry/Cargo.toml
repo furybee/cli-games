@@ -6,21 +6,44 @@ version.workspace = true
 license.workspace = true
 repository.workspace = true
 
-# ─────────────────────────────────────────────────────────────────────────────
+# ──────────────────────────────────────────────────────────────────────────────────
 # To add a game, append ONE line below (and one matching `use` in src/lib.rs).
 # Keep the list alphabetical and append-only — that keeps Git merges conflict-free.
-# ─────────────────────────────────────────────────────────────────────────────
+# ──────────────────────────────────────────────────────────────────────────────────
 [dependencies]
 game_2048 = { path = "../2048" }
+game_anagram = { path = "../anagram" }
+game_asteroids = { path = "../asteroids" }
+game_blackjack = { path = "../blackjack" }
+game_boggle = { path = "../boggle" }
+game_breakout = { path = "../breakout" }
+game_chess = { path = "../chess" }
+game_conway = { path = "../conway" }
 game_dinorun = { path = "../dinorun" }
 game_flappy = { path = "../flappy" }
+game_freecell = { path = "../freecell" }
 game_hangman = { path = "../hangman" }
+game_lightsout = { path = "../lightsout" }
+game_mastermind = { path = "../mastermind" }
+game_maze = { path = "../maze" }
 game_memory = { path = "../memory" }
 game_minesweeper = { path = "../minesweeper" }
+game_nonogram = { path = "../nonogram" }
+game_peg = { path = "../peg" }
 game_pong = { path = "../pong" }
+game_racer = { path = "../racer" }
+game_roguelike = { path = "../roguelike" }
+game_simon = { path = "../simon" }
+game_slidepuzzle = { path = "../slidepuzzle" }
 game_snake = { path = "../snake" }
+game_sokoban = { path = "../sokoban" }
 game_solitaire = { path = "../solitaire" }
+game_spaceinvaders = { path = "../spaceinvaders" }
 game_sudoku = { path = "../sudoku" }
 game_tetris = { path = "../tetris" }
 game_tictactoe = { path = "../tictactoe" }
+game_tron = { path = "../tron" }
+game_typing = { path = "../typing" }
+game_videopoker = { path = "../videopoker" }
 game_wordle = { path = "../wordle" }
+game_yahtzee = { path = "../yahtzee" }
