@@ -1,0 +1,11 @@
+[package]
+name = "game_core"
+description = "Shared traits, runtime context and game registry for cli-games"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+ratatui.workspace = true
+inventory.workspace = true

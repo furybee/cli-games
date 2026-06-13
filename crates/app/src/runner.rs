@@ -1,0 +1,69 @@
+//! Terminal setup/teardown and the per-game frame loop.
+
+use std::io::{self, Stdout};
+use std::time::{Duration, Instant};
+
+use anyhow::Result;
+use game_core::{Game, GameContext, Transition};
+use ratatui::Terminal;
+use ratatui::backend::CrosstermBackend;
+use ratatui::crossterm::event::{self, Event};
+use ratatui::crossterm::execute;
+use ratatui::crossterm::terminal::{
+    EnterAlternateScreen, LeaveAlternateScreen, disable_raw_mode, enable_raw_mode,
+};
+
+pub type Term = Terminal<CrosstermBackend<Stdout>>;
+
+/// Enter raw mode + alternate screen and hand back a ready terminal.
+pub fn setup_terminal() -> Result<Term> {
+    enable_raw_mode()?;
+    let mut stdout = io::stdout();
+    execute!(stdout, EnterAlternateScreen)?;
+    Ok(Terminal::new(CrosstermBackend::new(stdout))?)
+}
+
+/// Restore the terminal to its original state. Always call this, even on error.
+pub fn restore_terminal(term: &mut Term) -> Result<()> {
+    disable_raw_mode()?;
+    execute!(term.backend_mut(), LeaveAlternateScreen)?;
+    term.show_cursor()?;
+    Ok(())
+}
+
+/// Drive a single game until it returns [`Transition::Exit`] (or Ctrl+C).
+pub fn run_game(term: &mut Term, game: &mut dyn Game) -> Result<()> {
+    let tick = game.tick_rate();
+    let start = Instant::now();
+    let mut last = Instant::now();
+
+    loop {
+        term.draw(|f| {
+            let area = f.area();
+            game.render(f, area);
+        })?;
+
+        // Collect every key event that arrives within this tick.
+        let mut keys = Vec::new();
+        if event::poll(tick)? {
+            while event::poll(Duration::ZERO)? {
+                if let Event::Key(key) = event::read()? {
+                    keys.push(key);
+                }
+            }
+        }
+
+        let now = Instant::now();
+        let dt = now.duration_since(last);
+        last = now;
+
+        let ctx = GameContext::new(keys, dt, start.elapsed());
+        if ctx.quit_requested() {
+            break;
+        }
+        if game.update(&ctx) == Transition::Exit {
+            break;
+        }
+    }
+    Ok(())
+}

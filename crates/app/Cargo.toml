@@ -1,0 +1,20 @@
+[package]
+name = "cli-games"
+description = "A collection of terminal mini-games"
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "cli-games"
+path = "src/main.rs"
+
+[dependencies]
+game_core.workspace = true
+ratatui.workspace = true
+anyhow.workspace = true
+clap.workspace = true
+# Pulls in every game's registration. This is the only place the binary needs
+# to know about games; it never changes when games are added.
+games_all = { path = "../games/_registry" }

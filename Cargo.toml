@@ -1,0 +1,22 @@
+[workspace]
+resolver = "3"
+members = ["crates/core", "crates/app", "crates/games/*"]
+
+[workspace.package]
+edition = "2024"
+version = "0.1.0"
+license = "MIT"
+repository = "https://github.com/furybee/cli-games"
+
+[workspace.dependencies]
+ratatui = "0.29"
+anyhow = "1"
+clap = { version = "4", features = ["derive"] }
+inventory = "0.3"
+# Internal crates
+game_core = { path = "crates/core" }
+
+# The profile that 'dist' will build with
+[profile.dist]
+inherits = "release"
+lto = "thin"
