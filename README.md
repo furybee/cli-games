@@ -49,6 +49,7 @@ cli-games snake      # launch a game directly by id
 | | | |
 |---|---|---|
 | **Navigate the menu** | `↑` / `↓` (or `j` / `k`) | `Enter` to play |
+| **Filter the menu** | `f` (or `/`) then type | `Esc` clears the filter |
 | **In a game** | `q` / `Esc` back to menu | `Ctrl-C` quit |
 
 > Controls are shown in-game. Most games also accept `w`/`a`/`s`/`d`.
